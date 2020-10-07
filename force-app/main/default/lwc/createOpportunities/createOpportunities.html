@@ -1,0 +1,65 @@
+<template>
+    <!-- Opportunity Form-->
+    <div style="background-color:aliceblue">        
+        <lightning-layout multiple-rows=true>
+            <lightning-layout-item padding="around-small" size=12 small-device-size="12" medium-device-size="6" large-device-size="4">
+                <div class="slds-p-around_medium">
+                    <lightning-input type="text" label="Opportunity Name" name="opportunityName" placeholder="type here..." value={opportunityRecord.Name} required onchange={handleOppFieldChange}></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size=12 small-device-size="12" medium-device-size="6" large-device-size="4" >
+                <div class="slds-p-around_medium">
+                    <lightning-input type="number" label="Amount in USD" name="opportunityAmount" placeholder="$$$" value={opportunityRecord.Amount} required onchange={handleOppFieldChange}></lightning-input>
+                </div>
+            </lightning-layout-item>            
+            <lightning-layout-item padding="around-small" size=12 small-device-size="12" medium-device-size="6" large-device-size="4">
+                <div class="slds-p-around_medium">
+                    <lightning-input type="number" label="Amount in Euro" name="opportunityAmountEuro" placeholder="€€€" value={opportunityRecord.Amount_Euro__c} read-only onchange={handleOppFieldChange}></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size=12 small-device-size="12" medium-device-size="6" large-device-size="4">
+                <div class="slds-p-around_medium">
+                    <lightning-input type="date" label="Date" name="opportunityDate" value={opportunityRecord.CloseDate} required onchange={handleOppFieldChange}></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size=12 small-device-size="12" medium-device-size="6" large-device-size="4">
+                <div class="slds-p-around_medium">
+                    <template if:true={stagePicklistValues.data}>
+                    <lightning-combobox
+                                name="opportunityStage"
+                                label="Stage"
+                                value={opportunityRecord.StageName}
+                                placeholder="--Select--"
+                                options={stagePicklistValues.data.values}
+                                onchange={handleOppFieldChange}>
+                    </lightning-combobox>
+                    </template>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>        
+    </div>    
+    <!--Account list and Submit Button-->
+    <template if:true={accountRecordListLoaded}>
+    <!-- Account Table-->
+        <div style="height: 300px;">
+            <lightning-datatable
+                    key-field="Id"
+                    data={accountRecordList}
+                    columns={accountColumns}
+                    max-column-width=500
+                    onrowselection={handleAccountSelection}>
+            </lightning-datatable>
+        </div>    
+    <!-- Submit button -->
+        <div class="slds-align_absolute-center" style="background-color:aliceblue">
+            <lightning-button label="Create Opportunities" onclick={handleSave} variant="brand"></lightning-button>
+        </div>
+    </template>
+    <!-- Show spinner while accoun list is loaded-->
+    <div if:false={accountRecordListLoaded} class="slds-is-relative">
+        <lightning-spinner
+            alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    
+</template>
